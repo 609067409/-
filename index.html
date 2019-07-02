@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  body {
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+  }
+
+  #clock {
+    width: 800px;
+    height: 800px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #clock .ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    color: #fff;
+    transform: translate(-50%, -50%);
+    list-style-type: none;
+    text-align: right;
+    transform-origin: left center;
+  }
+
+  #clock .ring.hour {
+    width: 30%;
+  }
+
+  #clock .ring.minute {
+    width: 40%;
+  }
+
+  #clock .ring.second {
+    width: 50%;
+  }
+
+  [v-clock] {
+    display: none;
+  }
+</style>
+
+<body>
+  <div id="clock" class="clockContainer" v-clock>
+    <li class="ring hour" v-for="(item,index) in hours" :style="calculate(item, nowHours, 15)">{{item}}点</li>
+    <li class="ring minute" v-for="(item,index) in minute" :style="calculate(index,nowMinute, 6)">{{index}}分</li>
+    <li class="ring second" v-for="(item,index) in second" :style="calculate(index,nowSecond, 6)">{{item}}秒</li>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+<script>
+  let vm = new Vue({
+    el: '#clock',
+    data: {
+      hours: 24,
+      minute: 60,
+      second: 60,
+      // second: ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖', '拾',
+      //   '拾壹', '拾贰', '拾叁', '拾肆', '拾伍', '拾陆', '拾柒',
+      //   '拾捌', '拾玖', '贰拾',
+      //   '贰壹', '贰贰', '贰叁', '贰肆', '贰伍', '贰陆', '贰柒',
+      //   '贰捌', '贰玖', '贰拾',
+      //   '叁壹', '叁贰', '叁叁', '叁肆', '叁伍', '叁陆', '叁柒',
+      //   '叁捌', '叁玖', '叁拾',
+      //   '肆壹', '肆贰', '肆叁', '肆肆', '肆伍', '肆陆', '肆柒',
+      //   '肆捌', '肆玖', '肆拾',
+      //   '伍壹', '伍贰', '伍叁', '伍肆', '伍伍', '伍陆', '伍柒',
+      //   '伍捌', '伍玖'
+      // ],
+      nowHours: 0,
+      nowMinute: 0,
+      nowSecond: 0
+    },
+    created() {
+      setInterval(() => {
+        let dateObj = new Date()
+        this.nowHours = dateObj.getHours()
+        this.nowMinute = dateObj.getMinutes()
+        this.nowSecond = dateObj.getSeconds()
+      }, 1000)
+    },
+    methods: {
+      calculate(item, now, degree) {
+        return {
+          transform: 'rotate(' + (now - item) * degree + 'deg)'
+        }
+      },
+    }
+  })
+</script>
+
+</html>
